@@ -1,0 +1,38 @@
+.scoreboard-wrapper {
+  height: 100%;
+  display: grid;
+  grid-template: 1fr / 1fr 1fr;
+  grid-template-areas:
+    "local global";
+}
+
+.scoreboard-local {
+  grid-area: local;
+  position: sticky;
+  top: 0;
+  background: $color-main;
+  overflow-x: hidden;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  flex-flow: column nowrap;
+  padding: 0 2rem;
+
+  h1 { text-align: center }
+}
+
+.scoreboard-global {
+  height: 100%;
+  grid-area: global;
+  overflow-y: scroll;
+  margin-left: 20px;
+
+  .global-header {
+    margin-top: 10%;
+    text-align: center;
+  }
+}
+
+@import "../components/score-card";
+@import "../components/score-item";

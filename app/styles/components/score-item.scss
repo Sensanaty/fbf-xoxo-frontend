@@ -1,0 +1,16 @@
+.score-entry {
+  background: $color-main;
+  margin: 2rem 20px 2rem 0;
+  padding: 1%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  grid-template: 1fr 1fr / 1fr 1fr 1fr;
+  grid-template-areas:
+    "header header header"
+    ". . .";
+
+  h2 { grid-area: header }
+  pre { font-size: 1.5rem }
+}
