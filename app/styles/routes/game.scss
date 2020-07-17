@@ -51,6 +51,9 @@
       &:nth-child(7) { border-left: none; border-bottom: none; }
       &:nth-child(8) { border-bottom: none }
       &:nth-child(9) { border-bottom: none; border-right: none; }
+
+      &.player-victory { background: $color-good }
+      &.enemy-victory { background: $color-bad }
     }
 
     .player-turn {
