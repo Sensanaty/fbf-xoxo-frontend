@@ -1,1 +1,15 @@
+<div class="scoreboard-wrapper">
+  <div class="scoreboard-local">
+    <h1>Local Score</h1>
+    <ScoreCard @score={{@model.localScore}}/>
+  </div>
+
+  <div class="scoreboard-global">
+    <h1 class="global-header">Global Scores</h1>
+      {{#each model.score as |entry|}}
+        <ScoreItem @score={{entry}} />
+      {{/each}}
+  </div>
+</div>
+
 {{outlet}}

@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora&display=swap');
+@import "./colors";
+
+html, body, .root-div {
+  font-family: 'Sora', sans-serif;;
+  height: 100%;
+  margin: 0;
+  background: $color-background;
+}
+
+.active { background: lighten($color-accent, 5) }
+
+@import "./components/navbar";
+@import "./routes/game";
+@import "./routes/scoreboard";

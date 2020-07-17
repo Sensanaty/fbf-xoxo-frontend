@@ -1,5 +1,7 @@
 <div class="game-wrapper">
-  link
+  <div class="game-grid">
+    {{#each model.initialGameState as |row index|}}
+        <BoardTile @value={{row}} @tileID={{index}}/>
+    {{/each}}
+  </div>
 </div>
-
-{{outlet}}
