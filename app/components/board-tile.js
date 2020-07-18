@@ -50,7 +50,6 @@ export default class BoardTileComponent extends Component {
 
     board.style.background = "#FB9032";
 
-    // setTimeout( () => {
     board.classList.remove("grid");
     board.classList.add("flex");
     button.innerHTML = "Play Again";
@@ -70,7 +69,6 @@ export default class BoardTileComponent extends Component {
     }
 
     this.localStorageScore();
-    // }, 300)
   }
 
   localStorageScore() {
