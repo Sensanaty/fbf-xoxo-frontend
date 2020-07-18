@@ -57,5 +57,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
   }
 }
