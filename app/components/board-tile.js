@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object'
-import { tracked } from "@glimmer/tracking";
+import {action} from '@ember/object'
+import {tracked} from "@glimmer/tracking";
+import {chunk} from "lodash-es";
 
 const winningStates = [
   [0, 1, 2], // Horizontal
@@ -15,6 +16,69 @@ const winningStates = [
 
 export default class BoardTileComponent extends Component {
   @tracked playerTurn = true;
+  @tracked winner = "";
+
+  checkVictory(boardState) {
+    if (this.winner === "player" || this.winner === "enemy") {
+      this.setWinner();
+    }
+
+    const board = chunk(boardState, 3);
+    board.forEach(row => {
+      let rowSum = 0;
+      row.forEach(box => {
+        rowSum = rowSum + box;
+      })
+
+      if (rowSum === 3) {
+        this.winner = "player"
+        this.setWinner();
+      } else if (rowSum === -3) {
+        this.winner = "enemy"
+        this.setWinner();
+      }
+    })
+  }
+
+  /**
+   * Upon reaching a victory or draw state, create an overlay over the game board with the outcome on it
+   */
+  createOverlay() {
+    const board = document.querySelector(".game-area");
+    const status = document.querySelector(".status");
+    const button = document.createElement("button");
+
+    board.classList.remove("grid");
+    board.classList.add("flex");
+    button.innerHTML = "Play Again";
+    button.onclick = this.resetGame;
+
+    if (this.winner === "player") {
+      board.style.background = "#7CFFC4";
+      board.innerHTML = "You won!"
+    } else if ( this.winner === "enemy") {
+      board.style.background = "#FF837C"
+      board.innerHTML = "You lost!"
+    }
+
+    console.log(status.parentNode);
+    status.parentNode.replaceChild(button, status)
+  }
+
+  setWinner() {
+    const tiles = document.querySelectorAll(".grid-item");
+
+    tiles.forEach(tile => {
+      if (this.winner === "player") {
+        tile.parentNode.removeChild(tile)
+      } else if (this.winner === "enemy") {
+        tile.classList.add("enemy-victory");
+      }
+      tile.classList.remove("player-turn");
+    })
+
+    this.createOverlay()
+  }
 
   /**
    * Check the game board and populate the boardArray
@@ -26,7 +90,7 @@ export default class BoardTileComponent extends Component {
     const board = document.querySelectorAll(".grid-item");
     const boardArray = [];
 
-    board.forEach((row, index) => {
+    board.forEach((row) => {
       let textContent = row.innerHTML;
       if (textContent === "X") {
         boardArray.push(1)
@@ -36,7 +100,7 @@ export default class BoardTileComponent extends Component {
         boardArray.push(0)
       }
     });
-    window.localStorage.setItem("game-in-progress", boardArray);
+    // window.localStorage.setItem("game-in-progress", boardArray);
     this.checkVictory(boardArray);
   }
 
@@ -58,7 +122,7 @@ export default class BoardTileComponent extends Component {
   }
 
   /**
-   *
+   * Get AI to place an O on a random empty spot on the board <br>
    */
   computerRound() {
     this.playerTurn = false;
@@ -80,14 +144,15 @@ export default class BoardTileComponent extends Component {
     // Pick a random empty box and place an "O" there
     const randomPlacement = emptyRows[Math.floor(Math.random() * emptyRows.length)];
     setTimeout(() => {
+      if (!randomPlacement) {
+        alert("There's no more moves possible!");
+        return;
+      }
       randomPlacement.innerHTML = "O";
       this.playerTurn = true;
+      this.checkGameState();
       this.toggleUserClick();
-    }, Math.random() * (800 - 500) + 500)
-
-  }
-
-  checkVictory(state) {
+    }, Math.random() * (800 - 500) + 500) // Simulate thinking with a small timeout
   }
 
   /**
@@ -121,10 +186,19 @@ export default class BoardTileComponent extends Component {
       } else {
         tile.innerHTML = "X";
       }
+
       this.checkGameState();
-      this.computerRound();
-    } else {
-      alert("It's not your turn!")
-    }
+      if (this.winner === "") {
+        this.computerRound();
+      }
+    } else if (this.winner === "player" || this.winner === "enemy"){
+      return
+    } else alert("It's not your turn!");
+  }
+
+  resetGame() {
+    debugger;
+    console.log("reset");
+    window.location.href = "/"
   }
 }

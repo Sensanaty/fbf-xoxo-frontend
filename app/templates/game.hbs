@@ -2,7 +2,7 @@
   <div class="status player">
     Your turn
   </div>
-  <div class="game-grid">
+  <div class="game-area grid">
     {{#each model.initialGameState as |row index|}}
       <BoardTile @value={{row}} @tileID={{index}}/>
     {{/each}}

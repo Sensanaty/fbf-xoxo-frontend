@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
 
-  .status {
+  .status, button {
     position: fixed;
     left: 20px;
     text-align: center;
@@ -19,14 +19,50 @@
     &.enemy { background: $color-bad }
   }
 
-  .game-grid {
+  button {
+    background-color: $color-main;
+    border: 0;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    background-position: center;
+    transition: background 300ms ease-in-out;
+
+    // Ripped this CSS for the material "bubble" effect
+    &:hover {
+      background: lighten($color-main, 5) radial-gradient(circle, transparent 1%, lighten($color-main, 5) 1%) center/15000%;
+    }
+
+    &:active {
+      background-color: lighten($color-main, 15);
+      background-size: 100%;
+      transition: background 0s;
+    }
+
+    &:active, &:focus {
+      outline: none;
+    }
+  }
+
+  .game-area {
     padding: 2%;
     height: 75%;
     background: $color-main;
-    display: grid;
-    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
-    flex: 1 0 auto;
     margin: 0 25%;
+    flex: 1 0 auto;
+    transition: all 100ms ease-in-out;
+
+    &.grid {
+      display: grid;
+      grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    }
+
+    &.flex {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      font-size: 5rem;
+    }
 
     .grid-item {
       cursor: not-allowed;
@@ -51,16 +87,18 @@
       &:nth-child(7) { border-left: none; border-bottom: none; }
       &:nth-child(8) { border-bottom: none }
       &:nth-child(9) { border-bottom: none; border-right: none; }
-
-      &.player-victory { background: $color-good }
-      &.enemy-victory { background: $color-bad }
+      &.player-victory { background: $color-good !important }
+      &.enemy-victory { background: $color-bad !important }
     }
 
     .player-turn {
       cursor: pointer;
       background: $color-main !important;
 
-      &:hover { background: lighten($color-main, 10) }
+      &:hover {
+        background: lighten($color-main, 10)
+      }
+
       &:active {
         background: lighten($color-main, 15);
         transform: rotateX(10deg);
