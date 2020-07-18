@@ -16,29 +16,31 @@ const winningStates = [
 export default class BoardTileComponent extends Component {
   @tracked playerTurn = true;
   @tracked winner = "";
-  roundsPlayed = 0;
+
+  isVictory(boardState, player) {
+    return winningStates.some(indices => {
+      return boardState[indices[0]] === player && boardState[indices[1]] === player && boardState[indices[2]] === player
+    })
+  }
 
   /**
    * Check each combination of winningStates and compare boardState indices to them. If any of the indices match up with
    * winningStates, that's a win
    * @param {Array<number>} boardState the current state of the game represented as a 9-bit array with 1 for X, -1 for O and 0 for empty
-   * @param {(1|-1)} player numerical representation of the players. X is 1 and O is -1
+   * @param {( 1 | -1 )} player numerical representation of the players. X is 1 and O is -1
    */
   checkVictory(boardState, player) {
-    console.log(boardState);
-    winningStates.some(indices => {
-      if (boardState[indices[0]] === player && boardState[indices[1]] === player && boardState[indices[2]] === player) { // Nice & pretty :-)
-        if (player === 1) {
-          this.winner = "player"
-        } else {
-          this.winner = "enemy"
-        }
-        this.setWinner();
-      } else if (!boardState.includes(0) && this.roundsPlayed === 9) { // If there's no more 0s in boardState, that means every space is filled up with no detected winners
-        this.winner = "draw";
-        this.setWinner();
+    if (this.isVictory(boardState, player)) {
+      if (player === 1) {
+        this.winner = "player";
+      } else if (player === -1) {
+        this.winner = "enemy";
       }
-    });
+      this.setWinner();
+    } else if (!this.isVictory(boardState, player) && !boardState.includes(0)) {
+      this.winner = "draw";
+      this.setWinner();
+    }
   }
 
   setWinner() {
@@ -52,27 +54,29 @@ export default class BoardTileComponent extends Component {
     board.classList.remove("grid");
     board.classList.add("flex");
     button.innerHTML = "Play Again";
-    button.onclick = (() => { window.location.href = "/" });
+    button.onclick = (() => {
+      window.location.href = "/"
+    });
     status.parentNode.replaceChild(button, status)
 
-      if (this.winner === "player") {
-        board.style.background = "#7CFFC4";
-        board.innerHTML = "You won!"
-      } else if ( this.winner === "enemy") {
-        board.style.background = "#FF837C"
-        board.innerHTML = "You lost!"
-      } else if (this.winner === "draw") {
-        board.innerHTML = "It's a draw!"
-      }
+    if (this.winner === "player") {
+      board.style.background = "#7CFFC4";
+      board.innerHTML = "You won!"
+    } else if (this.winner === "enemy") {
+      board.style.background = "#FF837C"
+      board.innerHTML = "You lost!"
+    } else if (this.winner === "draw") {
+      board.innerHTML = "It's a draw!"
+    }
 
-      this.localStorageScore();
+    this.localStorageScore();
     // }, 300)
   }
 
   localStorageScore() {
-    switch(this.winner) {
+    switch (this.winner) {
       case "player":
-        window.localStorage.setItem("wins", )
+        window.localStorage.setItem("wins",)
       case "enemy":
 
       case "draw":
@@ -118,7 +122,6 @@ export default class BoardTileComponent extends Component {
       }
     })
 
-    this.roundsPlayed += 1;
     this.setStatus();
   }
 
@@ -146,11 +149,10 @@ export default class BoardTileComponent extends Component {
     const randomPlacement = emptyRows[Math.floor(Math.random() * emptyRows.length)];
     setTimeout(() => {
       if (!randomPlacement) {
-        alert("There's no more moves possible!");
+        this.checkVictory();
         return;
       }
       randomPlacement.innerHTML = "O";
-      this.roundsPlayed += 1;
       this.playerTurn = true;
       this.checkGameState(-1);
       this.toggleUserClick();
