@@ -16,6 +16,7 @@ const winningStates = [
 export default class BoardTileComponent extends Component {
   @tracked playerTurn = true;
   @tracked winner = "";
+  roundsPlayed = 0;
 
   /**
    * Check each combination of winningStates and compare boardState indices to them. If any of the indices match up with
@@ -33,7 +34,7 @@ export default class BoardTileComponent extends Component {
           this.winner = "enemy"
         }
         this.setWinner();
-      } else if (!boardState.includes(0)) { // If there's no more 0s in boardState, that means every space is filled up with no detected winners
+      } else if (!boardState.includes(0) && this.roundsPlayed === 9) { // If there's no more 0s in boardState, that means every space is filled up with no detected winners
         this.winner = "draw";
         this.setWinner();
       }
@@ -47,7 +48,7 @@ export default class BoardTileComponent extends Component {
 
     board.style.background = "#FB9032";
 
-    setTimeout( () => {
+    // setTimeout( () => {
     board.classList.remove("grid");
     board.classList.add("flex");
     button.innerHTML = "Play Again";
@@ -63,7 +64,19 @@ export default class BoardTileComponent extends Component {
       } else if (this.winner === "draw") {
         board.innerHTML = "It's a draw!"
       }
-    }, 300)
+
+      this.localStorageScore();
+    // }, 300)
+  }
+
+  localStorageScore() {
+    switch(this.winner) {
+      case "player":
+        window.localStorage.setItem("wins", )
+      case "enemy":
+
+      case "draw":
+    }
   }
 
   /**
@@ -104,6 +117,8 @@ export default class BoardTileComponent extends Component {
         row.classList.remove("player-turn")
       }
     })
+
+    this.roundsPlayed += 1;
     this.setStatus();
   }
 
@@ -135,6 +150,7 @@ export default class BoardTileComponent extends Component {
         return;
       }
       randomPlacement.innerHTML = "O";
+      this.roundsPlayed += 1;
       this.playerTurn = true;
       this.checkGameState(-1);
       this.toggleUserClick();
