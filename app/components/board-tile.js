@@ -68,17 +68,7 @@ export default class BoardTileComponent extends Component {
       board.innerHTML = "It's a draw!"
     }
 
-    this.localStorageScore();
-  }
-
-  localStorageScore() {
-    switch (this.winner) {
-      case "player":
-        window.localStorage.setItem("wins",)
-      case "enemy":
-
-      case "draw":
-    }
+    this.postGame();
   }
 
   /**
@@ -197,5 +187,41 @@ export default class BoardTileComponent extends Component {
     } else if (this.winner === "player" || this.winner === "enemy") {
       return
     } else alert("It's not your turn!");
+  }
+
+  postGame() {
+    this.localStorageScore()
+  }
+
+  /**
+   * After a game, place the outcome into localStorage
+   */
+  localStorageScore() {
+    // Check if token exists, and if it does, parse it since localStorage only stores strings
+    let wins = parseInt(localStorage.getItem("wins")) || 0;
+    let losses = parseInt(localStorage.getItem("losses")) || 0;
+    let draws = parseInt(localStorage.getItem("draws")) || 0;
+
+    switch (this.winner) {
+      case "player":
+        wins += 1;
+        localStorage.setItem("wins", wins);
+        break;
+      case "enemy":
+        losses += 1;
+        localStorage.setItem("losses", losses);
+        break;
+      case "draw":
+        draws += 1;
+        localStorage.setItem("draws", draws);
+        break;
+    }
+
+    /**
+     * At the end of it always set localStorage for the POST/PATCH requests
+     */
+    localStorage.setItem("wins", wins);
+    localStorage.setItem("losses", losses);
+    localStorage.setItem("draws", draws);
   }
 }
