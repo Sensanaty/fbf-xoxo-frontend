@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import {action} from '@ember/object'
 import {tracked} from "@glimmer/tracking";
-import {chunk} from "lodash-es";
 
 const winningStates = [
   [0, 1, 2], // Horizontal
@@ -18,22 +17,27 @@ export default class BoardTileComponent extends Component {
   @tracked playerTurn = true;
   @tracked winner = "";
 
-  checkVictory(boardState) {
-    const board = chunk(boardState, 3);
-    board.forEach(row => {
-      let rowSum = 0;
-      row.forEach(box => {
-        rowSum = rowSum + box;
-      })
-
-      if (rowSum === 3) {
-        this.winner = "player"
+  /**
+   * Check each combination of winningStates and compare boardState indices to them. If any of the indices match up with
+   * winningStates, that's a win
+   * @param {Array<number>} boardState the current state of the game represented as a 9-bit array with 1 for X, -1 for O and 0 for empty
+   * @param {(1|-1)} player numerical representation of the players. X is 1 and O is -1
+   */
+  checkVictory(boardState, player) {
+    console.log(boardState);
+    winningStates.some(indices => {
+      if (boardState[indices[0]] === player && boardState[indices[1]] === player && boardState[indices[2]] === player) { // Nice & pretty :-)
+        if (player === 1) {
+          this.winner = "player"
+        } else {
+          this.winner = "enemy"
+        }
         this.setWinner();
-      } else if (rowSum === -3) {
-        this.winner = "enemy"
+      } else if (!boardState.includes(0)) { // If there's no more 0s in boardState, that means every space is filled up with no detected winners
+        this.winner = "draw";
         this.setWinner();
       }
-    })
+    });
   }
 
   setWinner() {
@@ -56,6 +60,8 @@ export default class BoardTileComponent extends Component {
       } else if ( this.winner === "enemy") {
         board.style.background = "#FF837C"
         board.innerHTML = "You lost!"
+      } else if (this.winner === "draw") {
+        board.innerHTML = "It's a draw!"
       }
     }, 300)
   }
@@ -66,7 +72,7 @@ export default class BoardTileComponent extends Component {
    * - If a tile contains an O, push -1
    * - If a tile is empty, push 0
    */
-  checkGameState() {
+  checkGameState(player) {
     const board = document.querySelectorAll(".grid-item");
     const boardArray = [];
 
@@ -80,7 +86,8 @@ export default class BoardTileComponent extends Component {
         boardArray.push(0)
       }
     });
-    this.checkVictory(boardArray);
+
+    this.checkVictory(boardArray, player);
   }
 
   /**
@@ -129,7 +136,7 @@ export default class BoardTileComponent extends Component {
       }
       randomPlacement.innerHTML = "O";
       this.playerTurn = true;
-      this.checkGameState();
+      this.checkGameState(-1);
       this.toggleUserClick();
     }, Math.random() * (400 - 200) + 200) // Simulate thinking with a small timeout
   }
@@ -167,7 +174,7 @@ export default class BoardTileComponent extends Component {
         tile.innerHTML = "X";
       }
 
-      this.checkGameState();
+      this.checkGameState(1);
       if (this.winner === "") {
         this.computerRound();
       }
