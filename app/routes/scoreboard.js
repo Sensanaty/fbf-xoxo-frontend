@@ -1,10 +1,15 @@
 import Route from '@ember/routing/route';
 
 export default class ScoreboardRoute extends Route {
-  async model() {
+  model() {
     return {
-      localScore: this.store.findRecord('local-score', 1),
-      score: this.store.findAll('score')
+      localScore: {
+        username: localStorage.getItem("username") || "Anonymous",
+        wins: localStorage.getItem("wins") || 0,
+        losses: localStorage.getItem("losses") || 0,
+        draws: localStorage.getItem("draws") || 0,
+      },
+      score: this.store.peekAll("score")
     }
   }
 }
