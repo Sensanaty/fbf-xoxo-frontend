@@ -1,0 +1,32 @@
+@media screen and (max-width: 1400px) {
+  .game-wrapper {
+    .status {
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 0);
+      margin: auto;
+    }
+
+    .game-area { width: 60% }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .game-wrapper {
+    .game-area { width: 75% }
+  }
+}
+
+@media screen and (max-width: 657px) {
+  .game-wrapper {
+    .game-area { width: 80% }
+    .grid-item { font-size: 4.5em !important }
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .game-wrapper {
+    .game-area { height: 60%}
+    .grid-item { font-size: 4.5em !important }
+  }
+}
