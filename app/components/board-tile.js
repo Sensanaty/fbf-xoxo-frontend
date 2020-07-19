@@ -68,20 +68,17 @@ export default class BoardTileComponent extends Component {
     }
   }
 
+  /**
+   * Creates an overlay div that display whether the round ended in a win, draw or loss <br>
+   * Will also trigger the afterGame() method
+   */
   setWinner() {
     const board = document.querySelector(".game-area");
-    const status = document.querySelector(".status");
-    const button = document.createElement("button");
+    const form = document.querySelector(".username-form");
 
     board.style.background = "#FB9032";
-
     board.classList.remove("grid");
     board.classList.add("flex");
-    button.innerHTML = "Play Again";
-    button.onclick = (() => {
-      window.location.href = "/"
-    });
-    status.parentNode.replaceChild(button, status)
 
     if (this.winner === "player") {
       board.style.background = "#7CFFC4";
@@ -92,8 +89,8 @@ export default class BoardTileComponent extends Component {
     } else if (this.winner === "draw") {
       board.innerHTML = "It's a draw!"
     }
-
-    this.postGame();
+    board.appendChild(form);
+    this.localStorageScore();
   }
 
   /**
@@ -172,6 +169,7 @@ export default class BoardTileComponent extends Component {
     }, Math.random() * (400 - 200) + 200) // Simulate thinking with a small timeout
   }
 
+
   /**
    * Modify div.status text based on whether it's currently the player's turn or not
    */
@@ -213,9 +211,7 @@ export default class BoardTileComponent extends Component {
         break;
     }
 
-    /**
-     * At the end of it always set localStorage for the POST/PATCH requests
-     */
+    // At the end of it always set localStorage so it's available for the POST/PATCH requests
     localStorage.setItem("wins", wins);
     localStorage.setItem("losses", losses);
     localStorage.setItem("draws", draws);
