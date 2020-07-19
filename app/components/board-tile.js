@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import {action} from '@ember/object'
 import {tracked} from "@glimmer/tracking";
-import axios from 'axios';
 
 const winningStates = [
   [0, 1, 2], // Horizontal
@@ -17,6 +16,31 @@ const winningStates = [
 export default class BoardTileComponent extends Component {
   @tracked playerTurn = true;
   @tracked winner = "";
+
+  /**
+   * Gets the clicked box, and changes its innerHTML content to be an X if it's not occupied already <br>
+   * It then calls thecheckGameState() and computerRound() methods
+   * @param event
+   */
+  @action playerRound(event) {
+    const tile = document.getElementById(event.target.id)
+
+    if (tile.classList.contains("player-turn")) {
+      if (tile.innerHTML === "X" || tile.innerHTML === "O") {
+        alert("This tile is already occupied");
+        return // Don't play computerRound if user clicks on occupied block
+      } else {
+        tile.innerHTML = "X";
+      }
+
+      this.checkGameState(1);
+      if (this.winner === "") {
+        this.computerRound();
+      }
+    } else if (this.winner === "player" || this.winner === "enemy") {
+      return
+    } else alert("It's not your turn!");
+  }
 
   isVictory(boardState, player) {
     return winningStates.some(indices => {
@@ -163,35 +187,6 @@ export default class BoardTileComponent extends Component {
       textBox.classList.remove("player");
       textBox.classList.add("enemy");
     }
-  }
-
-  /**
-   * Gets the clicked box, and changes its innerHTML content to be an X if it's not occupied already <br>
-   * It then calls thecheckGameState() and computerRound() methods
-   * @param event
-   */
-  @action playerRound(event) {
-    const tile = document.getElementById(event.target.id)
-
-    if (tile.classList.contains("player-turn")) {
-      if (tile.innerHTML === "X" || tile.innerHTML === "O") {
-        alert("This tile is already occupied");
-        return // Don't play computerRound if user clicks on occupied block
-      } else {
-        tile.innerHTML = "X";
-      }
-
-      this.checkGameState(1);
-      if (this.winner === "") {
-        this.computerRound();
-      }
-    } else if (this.winner === "player" || this.winner === "enemy") {
-      return
-    } else alert("It's not your turn!");
-  }
-
-  postGame() {
-    this.localStorageScore()
   }
 
   /**
