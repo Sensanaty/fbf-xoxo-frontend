@@ -46,6 +46,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV.API_ENDPOINT = "https://murmuring-savannah-67805.herokuapp.com/"
     // here you can enable a production-specific feature
   }
 

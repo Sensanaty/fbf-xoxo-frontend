@@ -4,7 +4,16 @@
   </div>
   <div class="game-area grid">
     {{#each model.initialGameState as |row index|}}
-      <BoardTile @value={{row}} @tileID={{index}}/>
+      <BoardTile @value={{row}} @tileID={{index}} @usernameSet={{this.usernameSet}}/>
     {{/each}}
   </div>
+  <label class="username-form">
+    What's your username?
+    <Input id="username-field" @value={{@model.localScore.username}} />
+    <label class="checkbox-label" for="autoSend">
+      {{input type="checkbox" name="autoSend" checked=autoSend}}
+      Automatically send your score with that username?
+    </label>
+    <button id="submit-btn" type="submit" {{on "click" postScore}}>Send My Score</button>
+  </label>
 </div>
