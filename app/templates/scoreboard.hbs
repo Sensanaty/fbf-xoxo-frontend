@@ -2,6 +2,7 @@
   <div class="scoreboard-local">
     <h1>Local Score</h1>
     <ScoreCard @score={{@model.localScore}}/>
+    <button type="button" {{on "click" this.resetScore}}>Reset Local Score</button>
   </div>
 
   <div class="scoreboard-global">

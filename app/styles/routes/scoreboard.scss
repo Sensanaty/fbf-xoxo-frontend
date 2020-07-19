@@ -20,6 +20,19 @@
   padding: 0 2rem;
 
   h1 { text-align: center }
+
+  button {
+    padding: 15px;
+    background: $color-background;
+    border: none;
+    font-size: 1.4rem;
+    transition: all 100ms ease-in-out;
+    cursor: pointer;
+
+    &:hover { background: lighten($color-background, 10) }
+    &:active { background: lighten($color-background, 20)}
+    &:focus { outline: none}
+  }
 }
 
 .scoreboard-global {
