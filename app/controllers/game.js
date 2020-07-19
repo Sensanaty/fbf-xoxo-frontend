@@ -21,7 +21,7 @@ export default class GameController extends Controller {
 
     this.sendScore();
   }
-  
+
   sendScore() {
     const existingID = this.store.peekAll('score').filterBy("username", localStorage.getItem("username"));
     const wins = localStorage.getItem("wins");
