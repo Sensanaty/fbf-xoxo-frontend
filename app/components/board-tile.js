@@ -75,6 +75,7 @@ export default class BoardTileComponent extends Component {
   setWinner() {
     const board = document.querySelector(".game-area");
     const form = document.querySelector(".username-form");
+    const status = document.querySelector(".status");
 
     board.style.background = "#FB9032";
     board.classList.remove("grid");
@@ -89,6 +90,7 @@ export default class BoardTileComponent extends Component {
     } else if (this.winner === "draw") {
       board.innerHTML = "It's a draw!"
     }
+    status.style.display = "none";
     board.appendChild(form);
     this.localStorageScore();
   }
