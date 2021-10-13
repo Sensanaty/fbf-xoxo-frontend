@@ -46,7 +46,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV.API_ENDPOINT = "https://ember-tac-toe.herokuapp.com/"
+    ENV.API_ENDPOINT = "https://ember-tac-toe.herokuapp.com"
     // here you can enable a production-specific feature
   }
 
