@@ -31,7 +31,7 @@ export default class GameController extends Controller {
     if (existingID.length !== 0) {
       axios({
         method: "patch",
-        url: `${ENV.API_ENDPOINT}/scores/${existingID[0].id}?wins=${wins}&losses=${losses}&draws=${draws}`,
+        url: `${ENV.API_ENDPOINT}scores/${existingID[0].id}?wins=${wins}&losses=${losses}&draws=${draws}`,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -46,7 +46,7 @@ export default class GameController extends Controller {
       console.log("else");
       axios({
         method: "post",
-        url: `${ENV.API_ENDPOINT}/scores?wins=${wins}&losses=${losses}&draws=${draws}&username=${localStorage.getItem("username")}`,
+        url: `${ENV.API_ENDPOINT}scores?wins=${wins}&losses=${losses}&draws=${draws}&username=${localStorage.getItem("username")}`,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
